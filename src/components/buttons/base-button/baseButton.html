@@ -1,0 +1,13 @@
+{{#if (eq elementType "a")}}
+<a
+	href="#"
+	class="base-button"
+	x-data="baseButton({isDisabled : {{isDisabled}} })"
+>
+	<span>{{text}}</span>
+</a>
+{{else}}
+<button class="base-button" x-data="baseButton({isDisabled : {{isDisabled}} })">
+	<span>{{text}}</span>
+</button>
+{{/if}}

@@ -1,0 +1,93 @@
+<div class="bg-white rounded-xl font-montserrat shadow-xl p-4 mb-8">
+	<div x-data="{ nameFilter: '', sizeFilter: '', priceFilter: '' }">
+		<!-- Name Filter -->
+		<div class="mb-4">
+			<label for="nameFilter" class="block font-semibold mb-2"
+				>Name Filter</label
+			>
+			<input
+				type="text"
+				id="nameFilter"
+				class="border border-black rounded-md px-4 py-2 font-semibold w-full"
+				placeholder="Enter name"
+				x-model="nameFilter"
+			/>
+		</div>
+
+		<!-- Size Filter -->
+		<div class="mb-4">
+			<label for="sizeFilter" class="block font-semibold mb-2"
+				>Size Filter</label
+			>
+			<select
+				id="sizeFilter"
+				class="border border-black rounded-md px-4 py-2 font-semibold w-full"
+				x-model="sizeFilter"
+			>
+				<option value="">Select size</option>
+				<option value="40">40</option>
+				<option value="41">41</option>
+				<option value="42">42</option>
+				<option value="43">43</option>
+				<option value="44">44</option>
+			</select>
+		</div>
+
+		<!-- Price Filter -->
+		<div class="mb-4">
+			<label for="priceFilter" class="block font-semibold mb-2"
+				>Price Filter</label
+			>
+			<select
+				id="priceFilter"
+				class="border border-black rounded-md px-4 py-2 font-semibold w-full"
+				x-model="priceFilter"
+			>
+				<option value="">Select price range</option>
+				<option value="lessThan,75">Less than 75</option>
+				<option value="between,50,100">50 - 100</option>
+			</select>
+		</div>
+
+		<!-- Apply Filters Button -->
+		<button
+			class="border border-black rounded-md px-4 py-2 font-semibold w-full mb-4"
+			@click="
+                if (nameFilter) {
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'addFilter', name: 'name', condition: 'contain', value: nameFilter.toLowerCase() });
+                } else {
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'removeFilter', name: 'name' });
+                }
+                if (sizeFilter) {
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'addFilter', name: 'size', condition: 'numberEqual', value: sizeFilter });
+                } else {
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'removeFilter', name: 'size' });
+                }
+                if (priceFilter) {
+                    const [condition, ...values] = priceFilter.split(',');
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'addFilter', name: 'price', condition, value: values.join(',') });
+                } else {
+                    $dispatch('baseFilter', { id: 'myFilterContainer', method: 'removeFilter', name: 'price' });
+                }
+            "
+		>
+			Apply Filters
+		</button>
+
+		<!-- Clear Filters Button -->
+		<button
+			class="border border-black rounded-md px-4 py-2 font-semibold w-full"
+			@click="$dispatch('baseFilter', { id: 'myFilterContainer', method: 'resetFilter' })"
+		>
+			Clear Filters
+		</button>
+	</div>
+</div>
+
+<div
+	id="myFilterContainer"
+	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+	x-data="{...baseFilter() }"
+>
+	{{{card1}}} {{{card2}}} {{{card3}}} {{{card4}}} {{{card5}}} {{{card6}}}
+</div>

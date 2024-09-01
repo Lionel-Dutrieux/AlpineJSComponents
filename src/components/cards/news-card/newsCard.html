@@ -1,0 +1,40 @@
+<div
+	class="bg-white w-full rounded-lg font-montserrat shadow-xl hover:scale-95 transition-all duration-500 max-w-96"
+>
+	<div class="aspect-video">
+		<img
+			src="{{image}}"
+			alt="News Image"
+			class="w-full h-full object-cover object-center rounded-t-lg"
+		/>
+	</div>
+	<div class="px-8 py-4">
+		<div class="flex justify-between items-center mb-4">
+			<div class="text-gray-400 font-semibold text-xs">{{date}}</div>
+			<div
+				class="uppercase bg-green-600 text-white rounded-full px-3 py-1 text-xs"
+			>
+				{{tag}}
+			</div>
+		</div>
+		<h2 class="font-bold text-lg h-14 line-clamp-2 mb-1">{{title}}</h2>
+		<p class="line-clamp-2 text-sm text-gray-500 h-10 mb-4">
+			{{description}}
+		</p>
+		<div class="flex flex-row-reverse">
+			<a
+				href="#"
+				class="text-gray-600 flex gap-2 items-center hover:translate-x-1 focus:translate-x-1 transition-all"
+			>
+				<span class="underline text-xs font-semibold uppercase"
+					>Read more</span
+				>
+				<div
+					class="bg-gray-100 size-5 rounded-full flex items-center justify-center"
+				>
+					<i class="fa-solid fa-angle-right text-xs"></i>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>

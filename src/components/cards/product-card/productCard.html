@@ -1,0 +1,46 @@
+<div
+	class="bg-white w-full rounded-xl font-montserrat shadow-xl hover:scale-95 transition-all duration-500 max-w-80"
+	filter-size="{{size}}"
+	filter-name="{{name}}"
+	filter-price="{{price}}"
+	filter-tag="{{tag}}"
+>
+	<div class="aspect-square relative">
+		<div class="absolute inset-0 p-4 flex justify-between flex-col">
+			<div>
+				<div
+					class="bg-white inline-block rounded-md px-3 py-1 text-xs text-green-600 font-semibold"
+				>
+					{{tag}}
+				</div>
+			</div>
+			<div class="flex flex-row-reverse gap-2">
+				<div
+					class="bg-white bg-opacity-70 backdrop-blur inline-block rounded-md px-4 border text-sm border-black py-1 text-black font-semibold"
+				>
+					{{size}}
+				</div>
+			</div>
+		</div>
+		<img
+			src="{{image}}"
+			alt="News Image"
+			class="w-full h-full object-cover object-center rounded-t-xl"
+		/>
+	</div>
+	<div class="p-4">
+		<h2 class="font-bold text-lg h-14 line-clamp-2 mb-1">{{name}}</h2>
+		<div class="flex justify-between items-end">
+			<div>
+				<div class="text-sm text-gray-500 font-medium">Price</div>
+				<div class="font-bold text-lg">{{price}}€</div>
+			</div>
+			<button
+				class="bg-red-600 text-white flex items-center justify-center size-10 rounded-xl hover:bg-red-800 transition-all"
+				title="Add to basket"
+			>
+				<i class="fa-solid fa-cart-shopping"></i>
+			</button>
+		</div>
+	</div>
+</div>

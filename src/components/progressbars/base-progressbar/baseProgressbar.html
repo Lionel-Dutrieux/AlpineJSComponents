@@ -1,0 +1,66 @@
+<div class="w-96">
+	<div
+		class="bg-gray-200 h-2 rounded w-full"
+		x-data="baseProgress({ initialProgress: {{initialProgress}}, storeName: 'myStore', storeProperty: 'myProperty' })"
+		id="myProgressBar"
+	>
+		<div
+			class="bg-green-400 h-2 rounded transition-all duration-500"
+			:style="'width: ' + progress + '%'"
+		></div>
+	</div>
+</div>
+
+{{#if showControls}}
+<!-- EXAMPLE Controls -->
+<div class="flex flex-col gap-4 mt-4 bg-gray-100 p-4 rounded" x-data="">
+	<div>
+		<h1 class="mb-2 text-lg font-semibold">Event Based</h1>
+		<div class="flex gap-3">
+			<button
+				class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+				@click="$dispatch('baseProgress', { id: 'myProgressBar', method: 'updateProgress', progress: 0 })"
+			>
+				Set to 0%
+			</button>
+			<button
+				class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+				@click="$dispatch('baseProgress', { id: 'myProgressBar', method: 'updateProgress', progress: 50 })"
+			>
+				Set to 50%
+			</button>
+			<button
+				class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+				@click="$dispatch('baseProgress', { id: 'myProgressBar', method: 'updateProgress', progress: 100 })"
+			>
+				Set to 100%
+			</button>
+		</div>
+	</div>
+
+	<div>
+		<h1 class="mb-2 text-lg font-semibold">Store Based</h1>
+		<div class="flex gap-3">
+			<button
+				class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+				@click="$store.myStore.myProperty = 0"
+			>
+				Set to 0%
+			</button>
+			<button
+				class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+				@click="$store.myStore.myProperty = 50"
+			>
+				Set to 50%
+			</button>
+			<button
+				class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+				@click="$store.myStore.myProperty = 100"
+			>
+				Set to 100%
+			</button>
+		</div>
+	</div>
+</div>
+<!-- EXAMPLE Controls -->
+{{/if}}

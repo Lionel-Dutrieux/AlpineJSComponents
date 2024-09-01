@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@components/*": ["src/components/*"],
+        "@stories/*": ["src/stories/*"],
+        "@js/*": ["src/js/*"]
+      }
+    },
+    "include": ["src", "vite-env.d.ts"]
+  }

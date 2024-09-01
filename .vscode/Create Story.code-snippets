@@ -1,0 +1,27 @@
+{
+    "Create Story": {
+        "prefix": "stor",
+        "body": [
+            "import { compileTemplate } from '@stories/utils/handlebarsHelper.js';",
+            "import ${1:PrimaryButton}Template from '@components/buttons/buttons/Primary.html?raw';",
+            "",
+            "export default {",
+            "    title: 'Components/Buttons/${2:Primary Button}',",
+            "    parameters: {",
+            "        layout: \"centered\",",
+            "        version: \"1.0.0\",",
+            "    },",
+            "    tags: ['autodocs'],",
+            "};",
+            "",
+            "export const ${3:baseButton} = (args) => {",
+            "    return compileTemplate(${1:PrimaryButton}Template, args);",
+            "};",
+            "",
+            "${3:baseButton}.args = {",
+            "    text: 'Primary',",
+            "};"
+        ],
+        "description": "Create a story with placeholders"
+    }
+}

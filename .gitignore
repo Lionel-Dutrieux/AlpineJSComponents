@@ -1,0 +1,23 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output
+dist/
+build/
+
+# Ignore Storybook build output
+.storybook-static/
+
+# Ignore cache and temporary files
+.cache/
+.tmp/
+
+# Ignore environment-specific files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
