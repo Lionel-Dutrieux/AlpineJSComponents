@@ -12,9 +12,9 @@ const VERSION = "1.0.0";
  */
 const FILTER_CONDITIONS = {
     CONTAIN: "contain",
-    GREATER_THAN: "greaterThan",
-    LESS_THAN: "lessThan",
-    NUMBER_EQUAL: "numberEqual",
+    GREATERTHAN: "greaterThan",
+    LESSTHAN: "lessThan",
+    NUMBEREQUAL: "numberEqual",
     BETWEEN: "between",
 };
 
@@ -22,14 +22,16 @@ const FILTER_CONDITIONS = {
  * Base filter function to filter DOM elements based on specified conditions.
  * @param {Object} options - The options for the base filter.
  * @param {string} [options.condition='some'] - The condition to apply ('all' or 'some').
+ * @param {boolean} [options.updateUrlParams=false] - Whether to update URL parameters when a filter is applied.
  * @returns {Object} The base filter object.
  */
-export default function baseFilter({ condition = "some" } = {}) {
+export default function baseFilter({ condition = "some", updateUrlParams = false } = {}) {
     return {
         filters: {},
         originalChildren: [],
         condition: condition, // Can be 'all' or 'some'
         filteredChildren: [],
+        updateUrlParams: updateUrlParams,
 
         /**
          * Initializes the base filter.
@@ -40,6 +42,7 @@ export default function baseFilter({ condition = "some" } = {}) {
             this.setupEventListener();
             this.originalChildren = Array.from(this.$el.children);
             this.applyFilters();
+            this.checkUrlParams();
         },
 
         /**
@@ -105,6 +108,9 @@ export default function baseFilter({ condition = "some" } = {}) {
             );
             if (!filterExists) {
                 this.filters[name].push({ condition, value: value.toLowerCase() });
+                if (this.updateUrlParams) {
+                    this.updateUrl();
+                }
             }
         },
 
@@ -121,6 +127,9 @@ export default function baseFilter({ condition = "some" } = {}) {
                 if (this.filters[name].length === 0) {
                     delete this.filters[name];
                 }
+                if (this.updateUrlParams) {
+                    this.updateUrl();
+                }
             }
         },
 
@@ -132,6 +141,9 @@ export default function baseFilter({ condition = "some" } = {}) {
             this.filteredChildren = [];
             this.$el.innerHTML = "";
             this.originalChildren.forEach((child) => this.$el.appendChild(child));
+            if (this.updateUrlParams) {
+                this.updateUrl();
+            }
         },
 
         /**
@@ -199,11 +211,11 @@ export default function baseFilter({ condition = "some" } = {}) {
                 switch (condition) {
                     case FILTER_CONDITIONS.CONTAIN:
                         return attrValue.includes(value);
-                    case FILTER_CONDITIONS.GREATER_THAN:
+                    case FILTER_CONDITIONS.GREATERTHAN:
                         return !isNaN(attrValue) && parseFloat(attrValue) > parseFloat(value);
-                    case FILTER_CONDITIONS.LESS_THAN:
+                    case FILTER_CONDITIONS.LESSTHAN:
                         return !isNaN(attrValue) && parseFloat(attrValue) < parseFloat(value);
-                    case FILTER_CONDITIONS.NUMBER_EQUAL:
+                    case FILTER_CONDITIONS.NUMBEREQUAL:
                         return !isNaN(attrValue) && parseFloat(attrValue) === parseFloat(value);
                     case FILTER_CONDITIONS.BETWEEN:
                         const [min, max] = value.split(",");
@@ -240,6 +252,61 @@ export default function baseFilter({ condition = "some" } = {}) {
             this.$el.innerHTML = "";
             newFilteredChildren.forEach((child) => this.$el.appendChild(child));
             this.filteredChildren = newFilteredChildren;
+        },
+
+        /**
+         * Checks URL parameters for filters and applies them.
+         */
+        checkUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            params.forEach((value, key) => {
+                if (key.startsWith("filter_")) {
+                    const [name, condition] = key.replace("filter_", "").split("_");
+                    const values = value.split("|"); // Split the value on '|'
+                    values.forEach((val) => {
+                        console.log(
+                            `Processing filter: ${name}, condition: ${condition}, value: ${val}`
+                        );
+                        this.addFilter(name, condition, val);
+                    });
+                }
+            });
+            this.applyFilters();
+            this.getFilters();
+        },
+
+        /**
+         * Updates the URL parameters based on the current filters.
+         */
+        updateUrl() {
+            const params = new URLSearchParams(window.location.search);
+            Object.keys(this.filters).forEach((name) => {
+                const filterValues = {};
+                this.filters[name].forEach(({ condition, value }) => {
+                    const key = `filter_${name}_${condition}`;
+                    if (!filterValues[key]) {
+                        filterValues[key] = [];
+                    }
+                    filterValues[key].push(value);
+                });
+                Object.keys(filterValues).forEach((key) => {
+                    params.set(key, filterValues[key].join("|"));
+                });
+            });
+            // Remove any params that are no longer in the filters
+            Array.from(params.keys()).forEach((key) => {
+                if (key.startsWith("filter_")) {
+                    const [name, condition] = key.replace("filter_", "").split("_");
+                    if (
+                        !this.filters[name] ||
+                        !this.filters[name].some((filter) => filter.condition === condition)
+                    ) {
+                        params.delete(key);
+                    }
+                }
+            });
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, "", newUrl);
         },
     };
 }

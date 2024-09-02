@@ -115,7 +115,7 @@
 <div
     id="myFilterContainer"
     class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
-    x-data="{...baseFilter() }"
+    x-data="{...baseFilter({updateUrlParams: true}) }"
 >
     {{{card1}}} {{{card2}}} {{{card3}}} {{{card4}}} {{{card5}}} {{{card6}}}
 </div>
