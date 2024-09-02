@@ -66,7 +66,7 @@ export default function baseFilter({ condition = "some" } = {}) {
         /**
          * Handles the filter event.
          * @param {Object} detail - The event detail.
-         * @param {string} detail.method - The method to apply ('addFilter', 'removeFilter', 'resetFilter').
+         * @param {string} detail.method - The method to apply ('addFilter', 'removeFilter', 'resetFilter', 'getFilters').
          * @param {string} detail.name - The name of the filter.
          * @param {string} detail.condition - The condition of the filter.
          * @param {string} detail.value - The value of the filter.
@@ -82,6 +82,9 @@ export default function baseFilter({ condition = "some" } = {}) {
                     break;
                 case "resetFilter":
                     this.resetFilter();
+                    break;
+                case "getFilters":
+                    this.getFilters();
                     break;
             }
             this.applyFilters();
@@ -129,6 +132,19 @@ export default function baseFilter({ condition = "some" } = {}) {
             this.filteredChildren = [];
             this.$el.innerHTML = "";
             this.originalChildren.forEach((child) => this.$el.appendChild(child));
+        },
+
+        /**
+         * Retrieves all current filters.
+         */
+        getFilters() {
+            const event = new CustomEvent("baseFilterResponse", {
+                detail: {
+                    id: this.$el.id,
+                    filters: this.filters,
+                },
+            });
+            document.dispatchEvent(event);
         },
 
         /**

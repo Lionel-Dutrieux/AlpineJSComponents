@@ -1,7 +1,7 @@
-import { compileTemplate } from '@stories/utils/handlebarsHelper.js';
-import BaseFilterTemplate from '@components/filters/base-filter/baseFilter.html?raw';
+import { compileTemplate } from "@stories/utils/handlebarsHelper.js";
+import BaseFilterTemplate from "@components/filters/base-filter/baseFilter.html?raw";
 
-import * as ProductCardStorie from '@stories/components/cards/ProductCard.stories.js';
+import * as ProductCardStorie from "@stories/components/cards/ProductCard.stories.js";
 
 /**
  *
@@ -9,7 +9,7 @@ import * as ProductCardStorie from '@stories/components/cards/ProductCard.storie
  *
  * #### 1. **Firing an `addFilter` Event**
  * The `addFilter` event is used to add a new filter to the base filter.
- * 
+ *
  * Available conditions:
  * - CONTAIN: 'contain'
  * - GREATER_THAN: 'greaterThan'
@@ -105,24 +105,63 @@ import * as ProductCardStorie from '@stories/components/cards/ProductCard.storie
  *
  * This will reset all the filters and restore the original DOM elements.
  *
+ * #### 4. **Firing a `getFilters` Event**
+ * The `getFilters` event retrieves all current filters.
+ *
+ * ```javascript
+ * const event = new CustomEvent('baseFilter', {
+ *     detail: {
+ *         id: 'your-element-id',        // The ID of the element where the baseFilter is applied.
+ *         method: 'getFilters'          // Method to get all current filters.
+ *     }
+ * });
+ * document.dispatchEvent(event);
+ *
+ * document.addEventListener('baseFilterResponse', (event) => {
+ *     if (event.detail.id === 'your-element-id') {
+ *         console.log(event.detail.filters); // Logs the current filters
+ *     }
+ * });
+ * ```
+ *
+ * ##### Example Usage:
+ *
+ * ```javascript
+ * const event = new CustomEvent('baseFilter', {
+ *     detail: {
+ *         id: 'base-filter-12345',
+ *         method: 'getFilters'
+ *     }
+ * });
+ * document.dispatchEvent(event);
+ *
+ * document.addEventListener('baseFilterResponse', (event) => {
+ *     if (event.detail.id === 'base-filter-12345') {
+ *         console.log(event.detail.filters); // Logs the current filters
+ *     }
+ * });
+ * ```
+ *
+ * This will retrieve and log all the current filters applied to the element with ID "base-filter-12345".
+ *
  * ### Important Notes
  *
  * - **Element ID**: Replace `'your-element-id'` with the actual ID of the element where the `baseFilter` is initialized. If the ID is not set manually, it will be auto-generated (e.g., `base-filter-abc123`).
  * - **Filter Conditions**: The conditions must match those defined in the `FILTER_CONDITIONS` enum (`contain`, `greaterThan`, `lessThan`, `numberEqual`, `between`).
  *
  * These examples demonstrate how to trigger each available method in your `baseFilter` implementation using events.
- * 
+ *
  * ![Base Filter Example](https://i.lionel-dutrieux.com/u/pMfOjY.gif)
- * 
+ *
  */
 
 export default {
-    title: 'Base Components/Filters/Base Filter',
+    title: "Base Components/Filters/Base Filter",
     parameters: {
         layout: "centered",
         version: "1.0.0",
     },
-    tags: ['autodocs'],
+    tags: ["autodocs"],
 };
 
 export const baseFilter = (args) => {
@@ -130,47 +169,47 @@ export const baseFilter = (args) => {
 };
 
 baseFilter.args = {
-    text: 'Primary',
+    text: "Primary",
     card1: ProductCardStorie.productCard({
-        image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Nike Air Max 270',
-        size: '41',
-        price: '120',
-        tag: 'New',
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        name: "Nike Air Max 270",
+        size: "41",
+        price: "120",
+        tag: "New",
     }),
     card2: ProductCardStorie.productCard({
-        name: 'Fila Disruptor II',
-        price: '150',
-        size: '42',
-        image: 'https://images.unsplash.com/photo-1579446565308-427218a2c60e?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        tag: 'Promo',
+        name: "Fila Disruptor II",
+        price: "150",
+        size: "42",
+        image: "https://images.unsplash.com/photo-1579446565308-427218a2c60e?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Promo",
     }),
     card3: ProductCardStorie.productCard({
-        name: 'Puma RS-X',
-        price: '110',
-        size: '43',
-        image: 'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        tag: 'New',
+        name: "Puma RS-X",
+        price: "110",
+        size: "43",
+        image: "https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "New",
     }),
     card4: ProductCardStorie.productCard({
-        name: 'Reebok Classic Leather',
-        price: '90',
-        size: '40',
-        image: 'https://images.unsplash.com/photo-1704951108136-0153f403c5cb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        tag: 'Exclusive',
+        name: "Reebok Classic Leather",
+        price: "90",
+        size: "40",
+        image: "https://images.unsplash.com/photo-1704951108136-0153f403c5cb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Exclusive",
     }),
     card5: ProductCardStorie.productCard({
-        name: 'Converse Chuck Taylor',
-        price: '70',
-        size: '44',
-        image: 'https://images.unsplash.com/photo-1556048219-bb6978360b84?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        tag: 'New',
+        name: "Converse Chuck Taylor",
+        price: "70",
+        size: "44",
+        image: "https://images.unsplash.com/photo-1556048219-bb6978360b84?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "New",
     }),
     card6: ProductCardStorie.productCard({
-        name: 'Vans Old Skool',
-        price: '65',
-        size: '41',
-        image: 'https://images.unsplash.com/photo-1512990414788-d97cb4a25db3?q=80&w=2015&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        tag: 'Promo',
+        name: "Vans Old Skool",
+        price: "65",
+        size: "41",
+        image: "https://images.unsplash.com/photo-1512990414788-d97cb4a25db3?q=80&w=2015&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Promo",
     }),
 };
