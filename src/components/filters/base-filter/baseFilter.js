@@ -1,21 +1,21 @@
-import autoAnimate from '@formkit/auto-animate';
+import autoAnimate from "@formkit/auto-animate";
 
 /**
  * Version of the base filter.
  * @type {string}
  */
-const VERSION = '1.0.0';
+const VERSION = "1.0.0";
 
 /**
  * Filter conditions constants.
  * @enum {string}
  */
 const FILTER_CONDITIONS = {
-    CONTAIN: 'contain',
-    GREATER_THAN: 'greaterThan',
-    LESS_THAN: 'lessThan',
-    NUMBER_EQUAL: 'numberEqual',
-    BETWEEN: 'between'
+    CONTAIN: "contain",
+    GREATER_THAN: "greaterThan",
+    LESS_THAN: "lessThan",
+    NUMBER_EQUAL: "numberEqual",
+    BETWEEN: "between",
 };
 
 /**
@@ -24,7 +24,7 @@ const FILTER_CONDITIONS = {
  * @param {string} [options.condition='some'] - The condition to apply ('all' or 'some').
  * @returns {Object} The base filter object.
  */
-export default function baseFilter({ condition = 'some' } = {}) {
+export default function baseFilter({ condition = "some" } = {}) {
     return {
         filters: {},
         originalChildren: [],
@@ -56,7 +56,7 @@ export default function baseFilter({ condition = 'some' } = {}) {
          */
         setupEventListener() {
             const id = this.$el.id;
-            document.addEventListener('baseFilter', (event) => {
+            document.addEventListener("baseFilter", (event) => {
                 if (event.detail.id === id) {
                     this.handleFilterEvent(event.detail);
                 }
@@ -74,13 +74,13 @@ export default function baseFilter({ condition = 'some' } = {}) {
         handleFilterEvent(detail) {
             const { method, name, condition, value } = detail;
             switch (method) {
-                case 'addFilter':
+                case "addFilter":
                     this.addFilter(name, condition, value);
                     break;
-                case 'removeFilter':
+                case "removeFilter":
                     this.removeFilter(name, value);
                     break;
-                case 'resetFilter':
+                case "resetFilter":
                     this.resetFilter();
                     break;
             }
@@ -97,7 +97,12 @@ export default function baseFilter({ condition = 'some' } = {}) {
             if (!this.filters[name]) {
                 this.filters[name] = [];
             }
-            this.filters[name].push({ condition, value: value.toLowerCase() });
+            const filterExists = this.filters[name].some(
+                (filter) => filter.condition === condition && filter.value === value.toLowerCase()
+            );
+            if (!filterExists) {
+                this.filters[name].push({ condition, value: value.toLowerCase() });
+            }
         },
 
         /**
@@ -107,7 +112,9 @@ export default function baseFilter({ condition = 'some' } = {}) {
          */
         removeFilter(name, value) {
             if (this.filters[name]) {
-                this.filters[name] = this.filters[name].filter(filter => filter.value !== value.toLowerCase());
+                this.filters[name] = this.filters[name].filter(
+                    (filter) => filter.value !== value.toLowerCase()
+                );
                 if (this.filters[name].length === 0) {
                     delete this.filters[name];
                 }
@@ -120,15 +127,17 @@ export default function baseFilter({ condition = 'some' } = {}) {
         resetFilter() {
             this.filters = {};
             this.filteredChildren = [];
-            this.$el.innerHTML = '';
-            this.originalChildren.forEach(child => this.$el.appendChild(child));
+            this.$el.innerHTML = "";
+            this.originalChildren.forEach((child) => this.$el.appendChild(child));
         },
 
         /**
          * Applies the filters to the children elements.
          */
         applyFilters() {
-            const newFilteredChildren = this.originalChildren.filter(child => this.shouldShowChild(child));
+            const newFilteredChildren = this.originalChildren.filter((child) =>
+                this.shouldShowChild(child)
+            );
             if (this.shouldUpdateDOM(newFilteredChildren)) {
                 this.updateDOM(newFilteredChildren);
             }
@@ -140,19 +149,23 @@ export default function baseFilter({ condition = 'some' } = {}) {
          * @returns {boolean} True if the child should be shown, false otherwise.
          */
         shouldShowChild(child) {
-            if (this.condition === 'all') {
+            if (this.condition === "all") {
                 return Object.entries(this.filters).every(([name, filters]) => {
                     const attributeValue = child.getAttribute(`filter-${name}`);
                     if (!attributeValue) return false;
-                    const attributeValues = attributeValue.toLowerCase().split(',');
-                    return filters.every(({ condition, value }) => this.isMatch(attributeValues, condition, value));
+                    const attributeValues = attributeValue.toLowerCase().split(",");
+                    return filters.every(({ condition, value }) =>
+                        this.isMatch(attributeValues, condition, value)
+                    );
                 });
-            } else if (this.condition === 'some') {
+            } else if (this.condition === "some") {
                 return Object.entries(this.filters).some(([name, filters]) => {
                     const attributeValue = child.getAttribute(`filter-${name}`);
                     if (!attributeValue) return false;
-                    const attributeValues = attributeValue.toLowerCase().split(',');
-                    return filters.some(({ condition, value }) => this.isMatch(attributeValues, condition, value));
+                    const attributeValues = attributeValue.toLowerCase().split(",");
+                    return filters.some(({ condition, value }) =>
+                        this.isMatch(attributeValues, condition, value)
+                    );
                 });
             }
             return true;
@@ -166,7 +179,7 @@ export default function baseFilter({ condition = 'some' } = {}) {
          * @returns {boolean} True if the attribute value matches the filter condition, false otherwise.
          */
         isMatch(attributeValues, condition, value) {
-            return attributeValues.some(attrValue => {
+            return attributeValues.some((attrValue) => {
                 switch (condition) {
                     case FILTER_CONDITIONS.CONTAIN:
                         return attrValue.includes(value);
@@ -177,8 +190,13 @@ export default function baseFilter({ condition = 'some' } = {}) {
                     case FILTER_CONDITIONS.NUMBER_EQUAL:
                         return !isNaN(attrValue) && parseFloat(attrValue) === parseFloat(value);
                     case FILTER_CONDITIONS.BETWEEN:
-                        const [min, max] = value.split(',');
-                        return !isNaN(min) && !isNaN(max) && parseFloat(attrValue) >= parseFloat(min) && parseFloat(attrValue) <= parseFloat(max);
+                        const [min, max] = value.split(",");
+                        return (
+                            !isNaN(min) &&
+                            !isNaN(max) &&
+                            parseFloat(attrValue) >= parseFloat(min) &&
+                            parseFloat(attrValue) <= parseFloat(max)
+                        );
                     default:
                         console.warn(`Unknown filter condition: ${condition}`);
                         return false;
@@ -192,8 +210,10 @@ export default function baseFilter({ condition = 'some' } = {}) {
          * @returns {boolean} True if the DOM should be updated, false otherwise.
          */
         shouldUpdateDOM(newFilteredChildren) {
-            return this.filteredChildren.length !== newFilteredChildren.length ||
-                !this.filteredChildren.every((child, index) => child === newFilteredChildren[index]);
+            return (
+                this.filteredChildren.length !== newFilteredChildren.length ||
+                !this.filteredChildren.every((child, index) => child === newFilteredChildren[index])
+            );
         },
 
         /**
@@ -201,9 +221,9 @@ export default function baseFilter({ condition = 'some' } = {}) {
          * @param {Element[]} newFilteredChildren - The new filtered children.
          */
         updateDOM(newFilteredChildren) {
-            this.$el.innerHTML = '';
-            newFilteredChildren.forEach(child => this.$el.appendChild(child));
+            this.$el.innerHTML = "";
+            newFilteredChildren.forEach((child) => this.$el.appendChild(child));
             this.filteredChildren = newFilteredChildren;
-        }
+        },
     };
 }
