@@ -2,6 +2,7 @@ import { compileTemplate } from "@stories/utils/handlebarsHelper.js";
 import BaseFilterTemplate from "@components/filters/base-filter/baseFilter.html?raw";
 
 import * as ProductCardStorie from "@stories/components/cards/ProductCard.stories.js";
+import * as ToggleFilterStorie from "@stories/components/filters/ToggleFilter.stories.js";
 
 /**
  *
@@ -169,7 +170,27 @@ export const baseFilter = (args) => {
 };
 
 baseFilter.args = {
-    text: "Primary",
+    nikeFilterToggle: ToggleFilterStorie.toggleFilter({
+        toggleText: "Nike",
+        containerId: "myFilterContainer",
+        filterName: "name",
+        filterCondition: "contain",
+        filterValue: "nike",
+    }),
+    pumaFilterToggle: ToggleFilterStorie.toggleFilter({
+        toggleText: "Puma",
+        containerId: "myFilterContainer",
+        filterName: "name",
+        filterCondition: "contain",
+        filterValue: "puma",
+    }),
+    lessThan100FilterToggle: ToggleFilterStorie.toggleFilter({
+        toggleText: "Less than 100€",
+        containerId: "myFilterContainer",
+        filterName: "price",
+        filterCondition: "lessThan",
+        filterValue: "100",
+    }),
     card1: ProductCardStorie.productCard({
         image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         name: "Nike Air Max 270",
@@ -210,6 +231,48 @@ baseFilter.args = {
         price: "65",
         size: "41",
         image: "https://images.unsplash.com/photo-1512990414788-d97cb4a25db3?q=80&w=2015&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Promo",
+    }),
+    card7: ProductCardStorie.productCard({
+        name: "Adidas Ultraboost",
+        price: "180",
+        size: "42",
+        image: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "New",
+    }),
+    card8: ProductCardStorie.productCard({
+        name: "New Balance 574",
+        price: "100",
+        size: "43",
+        image: "https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Popular",
+    }),
+    card9: ProductCardStorie.productCard({
+        name: "Asics Gel-Kayano 27",
+        price: "160",
+        size: "41",
+        image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "New",
+    }),
+    card10: ProductCardStorie.productCard({
+        name: "Jordan 1 Retro",
+        price: "200",
+        size: "44",
+        image: "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Exclusive",
+    }),
+    card11: ProductCardStorie.productCard({
+        name: "Nike Blazer Mid '77",
+        price: "105",
+        size: "42",
+        image: "https://images.unsplash.com/photo-1465453869711-7e174808ace9?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        tag: "Classic",
+    }),
+    card12: ProductCardStorie.productCard({
+        name: "Under Armour HOVR Phantom",
+        price: "140",
+        size: "41",
+        image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=2031&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         tag: "Promo",
     }),
 };

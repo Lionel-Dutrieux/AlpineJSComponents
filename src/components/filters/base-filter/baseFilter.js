@@ -23,9 +23,14 @@ const FILTER_CONDITIONS = {
  * @param {Object} options - The options for the base filter.
  * @param {string} [options.condition='some'] - The condition to apply ('all' or 'some').
  * @param {boolean} [options.updateUrlParams=false] - Whether to update URL parameters when a filter is applied.
+ * @param {boolean} [options.animation=true] - Whether to animate the filter.
  * @returns {Object} The base filter object.
  */
-export default function baseFilter({ condition = "some", updateUrlParams = false } = {}) {
+export default function baseFilter({
+    condition = "some",
+    updateUrlParams = false,
+    animation = true,
+} = {}) {
     return {
         filters: {},
         originalChildren: [],
@@ -37,7 +42,7 @@ export default function baseFilter({ condition = "some", updateUrlParams = false
          * Initializes the base filter.
          */
         init() {
-            autoAnimate(this.$el);
+            if (animation) autoAnimate(this.$el);
             this.ensureUniqueId();
             this.setupEventListener();
             this.originalChildren = Array.from(this.$el.children);
@@ -144,6 +149,7 @@ export default function baseFilter({ condition = "some", updateUrlParams = false
             if (this.updateUrlParams) {
                 this.updateUrl();
             }
+            this.getFilters();
         },
 
         /**
@@ -163,11 +169,16 @@ export default function baseFilter({ condition = "some", updateUrlParams = false
          * Applies the filters to the children elements.
          */
         applyFilters() {
-            const newFilteredChildren = this.originalChildren.filter((child) =>
-                this.shouldShowChild(child)
-            );
-            if (this.shouldUpdateDOM(newFilteredChildren)) {
-                this.updateDOM(newFilteredChildren);
+            if (Object.keys(this.filters).length === 0) {
+                // No filters, re-add the original children
+                this.updateDOM(this.originalChildren);
+            } else {
+                const newFilteredChildren = this.originalChildren.filter((child) =>
+                    this.shouldShowChild(child)
+                );
+                if (this.shouldUpdateDOM(newFilteredChildren)) {
+                    this.updateDOM(newFilteredChildren);
+                }
             }
         },
 
@@ -261,12 +272,10 @@ export default function baseFilter({ condition = "some", updateUrlParams = false
             const params = new URLSearchParams(window.location.search);
             params.forEach((value, key) => {
                 if (key.startsWith("filter_")) {
-                    const [name, condition] = key.replace("filter_", "").split("_");
+                    let [name, condition] = key.replace("filter_", "").split("_");
+                    condition = condition || "contain"; // Set default condition to 'contain' if undefined
                     const values = value.split("|"); // Split the value on '|'
                     values.forEach((val) => {
-                        console.log(
-                            `Processing filter: ${name}, condition: ${condition}, value: ${val}`
-                        );
                         this.addFilter(name, condition, val);
                     });
                 }
