@@ -6,7 +6,11 @@ dist/
 build/
 
 # Ignore Storybook build output
-.storybook-static/
+storybook-static/
+
+# Ignore Storybook build output children
+storybook-static/**
+
 
 # Ignore cache and temporary files
 .cache/
