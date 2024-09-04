@@ -3,27 +3,6 @@ import path from "path";
 
 import postcss from "./postcss.config.js";
 
-// Function to escape special characters in HTML content
-function escapeHtml(html) {
-    return html.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$");
-}
-
-// Custom plugin to handle .html files as raw strings
-function rawHtmlPlugin() {
-    return {
-        name: "vite-plugin-raw-html",
-        transform(src, id) {
-            if (id.endsWith(".html")) {
-                const escapedSrc = escapeHtml(src);
-                return {
-                    code: `export default \`${escapedSrc}\`;`,
-                    map: null, // provide source map if available
-                };
-            }
-        },
-    };
-}
-
 export default defineConfig({
     resolve: {
         alias: {
@@ -48,5 +27,5 @@ export default defineConfig({
             },
         },
     },
-    plugins: [rawHtmlPlugin()],
+    plugins: [],
 });
