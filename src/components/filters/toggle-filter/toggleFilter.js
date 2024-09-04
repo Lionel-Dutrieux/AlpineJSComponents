@@ -2,7 +2,7 @@
  * Version of the toggle filter.
  * @type {string}
  */
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 export default function toggleFilter(mainContainerId, filterName, filterCondition, filterValue) {
     return {
@@ -48,6 +48,10 @@ export default function toggleFilter(mainContainerId, filterName, filterConditio
                 },
             });
             document.dispatchEvent(event);
+        },
+
+        get isChecked() {
+            return this.checked;
         },
     };
 }
