@@ -23,12 +23,14 @@ const FILTER_CONDITIONS = {
  * @param {Object} options - The options for the base filter.
  * @param {string} [options.condition='some'] - The condition to apply ('all' or 'some').
  * @param {boolean} [options.updateUrlParams=false] - Whether to update URL parameters when a filter is applied.
+ * @param {boolean} [options.autoInit=true] - Whether to automatically initialize the filter.
  * @param {boolean} [options.animation=true] - Whether to animate the filter.
  * @returns {Object} The base filter object.
  */
 export default function baseFilter({
     condition = "some",
     updateUrlParams = false,
+    autoInit = true,
     animation = true,
 } = {}) {
     return {
@@ -41,13 +43,15 @@ export default function baseFilter({
         /**
          * Initializes the base filter.
          */
-        init() {
-            if (animation) autoAnimate(this.$el);
-            this.ensureUniqueId();
-            this.setupEventListener();
-            this.originalChildren = Array.from(this.$el.children);
-            this.applyFilters();
-            this.checkUrlParams();
+        init(init = false) {
+            if (autoInit || init) {
+                if (animation) autoAnimate(this.$el);
+                this.ensureUniqueId();
+                this.setupEventListener();
+                this.originalChildren = Array.from(this.$el.children);
+                this.applyFilters();
+                this.checkUrlParams();
+            }
         },
 
         /**
@@ -93,6 +97,9 @@ export default function baseFilter({
                     break;
                 case "getFilters":
                     this.getFilters();
+                    break;
+                case "init":
+                    this.init(true);
                     break;
             }
             this.applyFilters();
